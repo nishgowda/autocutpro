@@ -48,22 +48,21 @@ def detect_image(img):
     return detections[0]
 def track_video(video_file):
     videopath = str(video_file)
-
-
     colors=[(255,0,0),(0,255,0),(0,0,255),(255,0,255),(128,0,0),(0,128,0),(0,0,128),(128,0,128),(128,128,0),(0,128,128)]
-
     vid = cv2.VideoCapture(videopath)
     vid.set(cv2.CAP_PROP_BUFFERSIZE, 2)
     mot_tracker = Sort()
 
-    cv2.namedWindow('Stream',cv2.WINDOW_NORMAL)
-    cv2.resizeWindow('Stream', (800,600))
+    #cv2.namedWindow('Stream',cv2.WINDOW_NORMAL)
+    #cv2.resizeWindow('Stream', (800,600))
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     ret,frame=vid.read()
     vw = frame.shape[1]
     vh = frame.shape[0]
     print ("Video size", vw,vh)
-    filepath = videopath.replace(".mp4", f"{datetime.now()}.mp4")
+    filepath = videopath.replace(".mp4", f"-{random.randint(1, 100)}.mp4")
+    filepath = filepath.replace("videos/", "out/")
+    print(filepath)
     outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
 
     frames = 0
@@ -106,7 +105,7 @@ def track_video(video_file):
                 #print(cls + " " + str(obj_id))
                 obj = f"{cls} obj_id"
                 objects.append(obj)
-        cv2.imshow('Stream', frame)
+        #cv2.imshow('Stream', frame)
         outvideo.write(frame)
 
         ch = 0xFF & cv2.waitKey(1)
@@ -115,7 +114,7 @@ def track_video(video_file):
     totaltime = time.time()-starttime
 
     print(frames, "frames", totaltime/frames, "s/frame")
-    print("Saved file as" + str(filepath))
+    print("Saved file as " + str(filepath))
     cv2.destroyAllWindows()
     outvideo.release()
 

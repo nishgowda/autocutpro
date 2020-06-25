@@ -3,3 +3,4 @@ images
 config/yolov3.weights
 .DS_Store
 _pycache_
+out
