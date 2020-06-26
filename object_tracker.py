@@ -26,6 +26,9 @@ model.eval()
 
 classes = utils.load_classes(class_path)
 Tensor = torch.FloatTensor
+objects = {}
+
+
 
 def detect_image(img):
     # scale and pad image
@@ -47,6 +50,7 @@ def detect_image(img):
         detections = utils.non_max_suppression(detections, 80, conf_thres, nms_thres)
     return detections[0]
 def track_video(video_file):
+    global objects
     videopath = str(video_file)
     colors=[(255,0,0),(0,255,0),(0,0,255),(255,0,255),(128,0,0),(0,128,0),(0,0,128),(128,0,128),(128,128,0),(0,128,128)]
     vid = cv2.VideoCapture(videopath)
@@ -67,7 +71,8 @@ def track_video(video_file):
 
     frames = 0
     starttime = time.time()
-    objects = []
+    objects = {}
+
     while(True):
         ret, frame = vid.read()
 
@@ -102,9 +107,10 @@ def track_video(video_file):
                 print(vid.get(cv2.CAP_PROP_FPS))
                 start_time = time.time()
                 print("--- %s seconds ---" % (time.time() - start_time))
-                #print(cls + " " + str(obj_id))
-                obj = f"{cls} obj_id"
-                objects.append(obj)
+                    #print(cls + " " + str(obj_id))
+                obj = f"{cls}-{obj_id}"
+                objects.update([(obj, [frame])])
+
         #cv2.imshow('Stream', frame)
         outvideo.write(frame)
 
@@ -115,10 +121,45 @@ def track_video(video_file):
 
     print(frames, "frames", totaltime/frames, "s/frame")
     print("Saved file as " + str(filepath))
+    print(objects)
     cv2.destroyAllWindows()
     outvideo.release()
 
+def cut_video(videopath, object_list, filename):
+    global objects
+    print(object_list)
+    vid = cv2.VideoCapture(videopath)
+    vid.set(cv2.CAP_PROP_BUFFERSIZE, 2)
 
+        #cv2.namedWindow('Stream',cv2.WINDOW_NORMAL)
+        #cv2.resizeWindow('Stream', (800,600))
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    ret,frame=vid.read()
+    vw = frame.shape[1]
+    vh = frame.shape[0]
+    filepath = f"edits/{filename}.mp4"
+    print(filepath)
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
+    while(True):
+        for obj in object_list:
+            if obj in objects:
+                frames = objects.get(obj)
+                outvideo.write(frames)
+                print(f"...writing {obj} with {frames}")
+            else:
+                print(f"{obj} is not detected")
+
+        ch = 0xFF & cv2.waitKey(1)
+        if ch == 27:
+            break
+    print("Saved edited video to output file")
+    cv2.destroyAllWindows()
+    outvideo.release()
 if __name__ == "__main__":
     video_file = sys.argv[1]
+    filename = sys.argv[2]
+    object_list = sys.argv[3:]
+    print(object_list)
     track_video(video_file)
+    cut_video(video_file, object_list, filename)
