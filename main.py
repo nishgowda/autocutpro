@@ -1,3 +1,14 @@
+"""
+    File: main.py
+    Author: Nish Gowda 2020
+    About: The purpose of this file is to purely be the
+    junction between the video_splice and object_tracker files.
+    Given the inputted command line arguments, the program extends
+    the values to the functions of the aformentioned files and
+    executes the functions.
+"""
+
+
 from video_splice import VideoSplice
 from object_tracker import ObjectTracker
 import sys

@@ -1,7 +1,7 @@
 # Object-Tracking-Video-Editor
 Automating the Video Editing process through Object Tracking
 ## HOW?
-Using PyTorch and YOLOv3, it's simple enough to create a deep learning model that can track objects in a given video. Using this model, my algorithm allows the user to specify which objects in a given video they would like to scan through and will then make cuts along the frames of these objects in the given video and splice them together to create a new scene. If the object is one of the available classes that the model can detect, then this allows the user to save themselves of having to go through all the amount of footage just to edit a given scene with a specific object. After running the program you will notice two videos have been created. One that shows all the objects tracked in the video with boxes identifying them. And the other one will be the edited version of your original inputed video that edited out everything besides the objects you specified.
+Using PyTorch, YOLOv3, and OpenCV a deep learning model can be made to track objects in a given video. Using this model, my algorithm allows the user to specify which objects in a given video they would like to scan through and will then make cuts along the frames of these objects in the video and splice them together to create a new scene. If the object is one of the available classes that the model can detect, then this allows the user to save themselves of having to go through all the amount of footage just to edit a given scene with a specific object. After running the program you will notice two videos have been created. One that shows all the objects tracked in the video with boxes identifying them, and the other will be an edited version of your original inputed video that edited out everything besides the objects you specified.
 ## Installation:
 ```
 git clone: https://github.com/nishgowda/Object-Tracking-Video-Editor
@@ -14,7 +14,7 @@ git clone: https://github.com/nishgowda/Object-Tracking-Video-Editor
 ### Example:
 
   ```
-  $ python3 object_tracker.py videos/short-clip.mp4 test-output2.mp4 car-3.0 person-15.0
+  $ python3 main.py videos/short-clip.mp4 test-output2.mp4 car-3.0 person-15.0
   ```
 
 *A project by Nish Gowda*

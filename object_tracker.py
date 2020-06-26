@@ -1,3 +1,14 @@
+"""
+    File: object_tracker.py
+    Author: Nish Gowda 2020
+    About: The purpose of this file is to detect the objects
+    in each frame of a given video. The detect image function
+    uses the sort and model file to detect images that are
+    within the model class in a given frame. With that, it stores the
+    contents of the detected object and the frames that object
+    is located in a dictionary that is then used in the video_slice
+    file.
+"""
 from models import *
 from utils import *
 
@@ -106,11 +117,10 @@ class ObjectTracker():
                     cv2.rectangle(frame, (x1, y1), (x1+box_w, y1+box_h), color, 4)
                     cv2.rectangle(frame, (x1, y1-35), (x1+len(cls)*19+80, y1), color, -1)
                     cv2.putText(frame, cls + "-" + str(int(obj_id)), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
-                        #print(cls + " " + str(obj_id))
-                    obj = f"{cls}-{obj_id}"
+                    obj = f"{cls}-{obj_id}" # The identity of the objects found
                     self.objects.setdefault(obj, []).append(frame)
 
-            #cv2.imshow('Stream', frame)
+
 
             outvideo.write(frame)
             bar.next()
