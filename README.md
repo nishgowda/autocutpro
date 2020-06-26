@@ -12,6 +12,7 @@ git clone: https://github.com/nishgowda/Object-Tracking-Video-Editor
   3. Run the shell file download_weights.sh or run ```wget https://pjreddie.com/media/files/yolov3.weights```
   2. Specify a directory of the video you would like to read, specify the output directory for the edited copy and the objects you would like to detect.
 ### Example:
+
   ```
   $ python3 object_tracker.py videos/short-clip.mp4 test-output2.mp4 car-3.0 person-15.0
   ```
