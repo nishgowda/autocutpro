@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torch.autograd import Variable
 from datetime import datetime
-
+from collections import defaultdict
 from PIL import Image
 import cv2
 from sort import *
@@ -72,7 +72,6 @@ def track_video(video_file):
     frames = 0
     starttime = time.time()
     objects = {}
-
     while(True):
         ret, frame = vid.read()
 
@@ -109,7 +108,7 @@ def track_video(video_file):
                 print("--- %s seconds ---" % (time.time() - start_time))
                     #print(cls + " " + str(obj_id))
                 obj = f"{cls}-{obj_id}"
-                objects.__setitem__(obj,frame)
+                objects.setdefault(obj, []).append(frame)
 
         #cv2.imshow('Stream', frame)
         outvideo.write(frame)
@@ -118,7 +117,6 @@ def track_video(video_file):
         if ch == 27:
             break
     totaltime = time.time()-starttime
-
     print(frames, "frames", totaltime/frames, "s/frame")
     print("Saved file as " + str(filepath))
     print(objects)
@@ -143,10 +141,10 @@ def cut_video(videopath, object_list, filename):
     outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
     for obj in object_list:
         if obj in objects:
-            frames = objects.get(obj)
-            print(frames)
-            outvideo.write(frames)
-            print(f"...writing {obj} with {frames}")
+            for frames in objects.get(obj):
+                print(frames)
+                outvideo.write(frames)
+                print(f"...writing {obj} with {frames}")
         else:
             print(f"{obj} is not detected")
         ch = 0xFF & cv2.waitKey(1)
