@@ -109,7 +109,7 @@ def track_video(video_file):
                 print("--- %s seconds ---" % (time.time() - start_time))
                     #print(cls + " " + str(obj_id))
                 obj = f"{cls}-{obj_id}"
-                objects.update([(obj, [frame])])
+                objects.__setitem__(obj,frame)
 
         #cv2.imshow('Stream', frame)
         outvideo.write(frame)
@@ -141,15 +141,14 @@ def cut_video(videopath, object_list, filename):
     print(filepath)
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
-    while(True):
-        for obj in object_list:
-            if obj in objects:
-                frames = objects.get(obj)
-                outvideo.write(frames)
-                print(f"...writing {obj} with {frames}")
-            else:
-                print(f"{obj} is not detected")
-
+    for obj in object_list:
+        if obj in objects:
+            frames = objects.get(obj)
+            print(frames)
+            outvideo.write(frames)
+            print(f"...writing {obj} with {frames}")
+        else:
+            print(f"{obj} is not detected")
         ch = 0xFF & cv2.waitKey(1)
         if ch == 27:
             break
