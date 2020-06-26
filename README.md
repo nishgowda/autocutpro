@@ -14,7 +14,7 @@ git clone: https://github.com/nishgowda/Object-Tracking-Video-Editor
 ### Example:
 
   ```
-  $ python3 object_tracker.py videos/short-clip.mp4 test-output2.mp4 car-3.0 person-15.0
+  $ python3 main.py videos/short-clip.mp4 test-output.mp4 car-3.0 person-15.0
   ```
 
 *A project by Nish Gowda*
