@@ -39,8 +39,8 @@ class MotionDetection():
                 diff_frame = prevFrame - old_frame
                 diff_frame -= diff_frame.min()
                 disp_frame = np.uint8(255.0*diff_frame/float(diff_frame.max()))
-                avg_frame = (np.mean(disp_frame) / 225.0)
-                avg_frame = round(avg_frame * 100, 1)
+                avg_frame = (np.mean(disp_frame) / 255.0)
+                avg_frame = round(avg_frame * 100)
                 #print(avg_frame)
                 self.frames.update({avg_frame : frame})
                 bar.next()
@@ -48,5 +48,5 @@ class MotionDetection():
             ch = 0xFF & cv2.waitKey(1)
             if ch == 27:
                 break
-
+        #print(self.frames)
         cv2.destroyAllWindows()

@@ -53,15 +53,16 @@ class VideoSplice():
             ch = 0xFF & cv2.waitKey(1)
             if ch == 27:
                     break
-        new_video_length = int(outvideo.get(cv2.CAP_PROP_FRAME_COUNT))
-        percent_edited = round((new_video_length / old_vid_length) * 100, 1)
+        new_video = cv2.VideoCapture(filepath)
+        new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
+        percent_edited = round(((old_vid_length - new_video_length) / old_vid_length)) * 100, 1)
         print("\n------------------------------------")
         print("Edited out ", percent_edited, "% of video")
         print("\n------------------------------------")
         print("\nSaved edited video to output file as ", filepath)
         cv2.destroyAllWindows()
         outvideo.release()
-        
+
 # Stitches together the the frames that have a motion threshold of greater than or equal to the input to create a sequence.
     def cut_motion_video(self, videopath, filename,  motion_percent, frames):
         vid = cv2.VideoCapture(videopath)
@@ -77,7 +78,7 @@ class VideoSplice():
         for avg_frame, frame in frames.items():
             top_percent = (avg_frame / len(frames)) * 100
             #print(top_percent)
-            if top_percent >= motion_percent:
+            if top_percent >= float(motion_percent[0]) or top_percent <= float(top_percent[1]):
                 edited_frames.append(avg_frame)
                 edited_frames = list(set(edited_frames))
                 #print(edited_frames)
@@ -91,8 +92,9 @@ class VideoSplice():
                     break
         cv2.destroyAllWindows()
         outvideo.release()
-        new_video_length = int(outvideo.get(cv2.CAP_PROP_FRAME_COUNT))
-        percent_edited = round((new_video_length / old_vid_length) * 100, 1)
+        new_video = cv2.VideoCapture(filepath)
+        new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
+        percent_edited = round(((old_vid_length - new_video_length) / old_vid_length)) * 100, 1)
         print("\n------------------------------------")
         print("Edited out: ", percent_edited, "% of video")
         print("------------------------------------")
