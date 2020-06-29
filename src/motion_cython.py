@@ -51,4 +51,4 @@ class MotionDetection():
 
 if __name__ == "__main__":
     motion_detection = MotionDetection()
-    motion_detection.compare_rgb("videos/short-test.mp4")
+    motion_detection.compare_rgb("../videos/short-test.mp4")
