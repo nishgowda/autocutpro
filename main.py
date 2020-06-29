@@ -28,7 +28,7 @@ class Main():
             video_splice = VideoSplice()
             obj_tracker.track_video(self.video_file)
             object_frames = obj_tracker.objects
-            video_splice.cut_video(self.video_file, self.object_list, self.filename, object_frames)
+            video_splice.cut_tracker_video(self.video_file, self.object_list, self.filename, object_frames)
         elif self.option == 'motion':
             motion_detector = MotionDetection()
             video_splice = VideoSplice()

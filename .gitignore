@@ -5,3 +5,4 @@ config/yolov3.weights
 _pycache_
 out
 edits
+processing_module.cpython-37m-darwin.so
