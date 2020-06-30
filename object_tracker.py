@@ -1,7 +1,7 @@
 """
-    File: object_tracker.py
-    Author: Nish Gowda 2020
-    About: The purpose of this file is to detect the objects
+    @file: object_tracker.py
+    @author: Nish Gowda 2020
+    @about: The purpose of this file is to detect the objects
     in each frame of a given video. The detect image function
     uses the sort and model file to detect images that are
     within the model class in a given frame. With that, it stores the
@@ -63,7 +63,7 @@ class ObjectTracker():
             detections = model(input_img)
             detections = utils.non_max_suppression(detections, 80, conf_thres, nms_thres)
         return detections[0]
-    def track_video(self, video_file):
+    def track_video(self, video_file, outpath):
         videopath = str(video_file)
         colors=[(255,0,0),(0,255,0),(0,0,255),(255,0,255),(128,0,0),(0,128,0),(0,0,128),(128,0,128),(128,128,0),(0,128,128)]
         vid = cv2.VideoCapture(videopath)
@@ -78,14 +78,11 @@ class ObjectTracker():
         vh = frame.shape[0]
         video_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
         print ("Video size", vw,vh)
-        filepath = videopath.replace(".mp4", f"-{random.randint(1, 100)}.mp4")
-        filepath = filepath.replace("videos/", "out/")
         print(filepath)
-        outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
-
+        outvideo = cv2.VideoWriter(outpath,fourcc,20.0,(vw,vh))
         frames = 0
         starttime = time.time()
-        bar = Bar('WRITING SEQUENCE TO VIDEO ', max=video_length, suffix='%(percent)d%%')
+        bar = Bar('Tracking objects in video ', max=video_length, suffix='%(percent)d%%')
         while(True):
             ret, frame = vid.read()
 

@@ -1,7 +1,7 @@
 """
     @file: motion_detection.py
     @author: Nish Gowda 2020
-    About: this file compares each frame by
+    @about: this file compares each frame by
     computing the difference between their
     max and min values
 """
@@ -20,7 +20,7 @@ class MotionDetection():
         self.total_diff = 0.0
         self.frames = {}
 
-    #computes the difference between each frame in video
+    #computes the rgb value for each pixel in each frame
     def compare_frames(self, videopath):
         vid = cv2.VideoCapture(videopath)
         video_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -41,7 +41,7 @@ class MotionDetection():
             imgHeight = img.shape[1]
             numPixels = img.size
             diffR, diffG, diffB = 0.0, 0.0, 0.0
-            
+
             if old_frame is not None:
 
                 colorsB1, colorsG1, colorsR1 = cv2.split(img)

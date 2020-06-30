@@ -29,7 +29,7 @@ from progress.bar import Bar
 
 class VideoSplice():
 # Stitches together the frames of the targeted objects to create a sequence
-    def cut_tracker_video(self, videopath, object_list, filename, obj_frames):
+    def cut_tracker_video(self, videopath, outpath,  object_list, obj_frames):
         vid = cv2.VideoCapture(videopath)
         old_vid_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
         vid.set(cv2.CAP_PROP_BUFFERSIZE, 2)
@@ -37,7 +37,7 @@ class VideoSplice():
         ret,frame=vid.read()
         vw = frame.shape[1]
         vh = frame.shape[0]
-        filepath = f"edits/{filename}.mp4"
+        filepath = outpath
         print(filepath)
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
@@ -64,14 +64,14 @@ class VideoSplice():
         outvideo.release()
 
 # Stitches together the the frames that have a motion threshold of greater than or equal to the input to create a sequence.
-    def cut_motion_video(self, videopath, filename,  motion_percent, frames):
+    def cut_motion_video(self, videopath, outpath,  motion_percent, frames):
         vid = cv2.VideoCapture(videopath)
         vid.set(cv2.CAP_PROP_BUFFERSIZE, 2)
         old_vid_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
         ret,frame=vid.read()
         vw = frame.shape[1]
         vh = frame.shape[0]
-        filepath = f"edits/{filename}.mp4"
+        filepath = outpath
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
         edited_frames = []
