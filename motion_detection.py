@@ -14,7 +14,6 @@ from PIL import Image
 import collections
 from progress.bar import Bar
 import time
-import motion
 class MotionDetection():
 
     def __init__(self):
@@ -33,14 +32,33 @@ class MotionDetection():
             if not ret:
                 break
             pilimg = Image.fromarray(frame)
-            prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            if not ret:
-                break
+            prevFrame = cv2.cvtColor(frame, cv2.COLOR_HSV2RGB)
+            pilimg2 = Image.fromarray(prevFrame)
+            img = np.array(pilimg)
+            prevImg = np.array(pilimg2)
+
+            imgWidth = img.shape[0]
+            imgHeight = img.shape[1]
+            numPixels = img.size
+            diffR, diffG, diffB = 0.0, 0.0, 0.0
+            
             if old_frame is not None:
-                avg_frame = compare_rgb(img, prevImg)
-                print(avg_frame)
-                self.frames.update({avg_frame : frame})
-                bar.next()
+
+                colorsB1, colorsG1, colorsR1 = cv2.split(img)
+                colorsB2, colorsG2, colorsR2 = cv2.split(prevImg)
+                diffR += np.sum(colorsR1 - colorsR2) / 255.0
+                diffG += np.sum(colorsG1 - colorsG2) / 255.0
+                diffB += np.sum(colorsB1 - colorsB2) / 255.0
+                diffR /= numPixels
+                diffG /= numPixels
+                diffB /= numPixels
+                self.total_diff = (diffR + diffG + diffB) / 3.0
+                self.total_diff = round(self.total_diff * 100)
+                #print(self.total_diff)
+
+
+                self.frames.update({self.total_diff : frame})
+            bar.next()
             old_frame = prevFrame
             ch = 0xFF & cv2.waitKey(1)
             if ch == 27:

@@ -108,15 +108,14 @@ class ObjectTracker():
                 unique_labels = detections[:, -1].cpu().unique()
                 n_cls_preds = len(unique_labels)
                 for x1, y1, x2, y2, obj_id, cls_pred in tracked_objects:
-
+                    cls = classes[int(cls_pred)]
+                    obj = f"{cls}-{obj_id}" # The identity of the objects found
+                    self.objects.setdefault(obj, []).append(frame)
                     box_h = int(((y2 - y1) / unpad_h) * img.shape[0])
                     box_w = int(((x2 - x1) / unpad_w) * img.shape[1])
                     y1 = int(((y1 - pad_y // 2) / unpad_h) * img.shape[0])
                     x1 = int(((x1 - pad_x // 2) / unpad_w) * img.shape[1])
                     color = colors[int(obj_id) % len(colors)]
-                    cls = classes[int(cls_pred)]
-                    obj = f"{cls}-{obj_id}" # The identity of the objects found
-                    self.objects.setdefault(obj, []).append(frame)
                     cv2.rectangle(frame, (x1, y1), (x1+box_w, y1+box_h), color, 4)
                     cv2.rectangle(frame, (x1, y1-35), (x1+len(cls)*19+80, y1), color, -1)
                     cv2.putText(frame, cls + "-" + str(int(obj_id)), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)

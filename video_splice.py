@@ -55,7 +55,7 @@ class VideoSplice():
                     break
         new_video = cv2.VideoCapture(filepath)
         new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
-        percent_edited = round(((old_vid_length - new_video) / old_vid_length) * 100)
+        percent_edited = round(((old_vid_length - new_video_length) / old_vid_length) * 100)
         print("\n------------------------------------")
         print("Edited out ", percent_edited, "% of video")
         print("\n------------------------------------")
@@ -94,7 +94,7 @@ class VideoSplice():
         outvideo.release()
         new_video = cv2.VideoCapture(filepath)
         new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
-        percent_edited = round(((old_vid_length - new_video) / old_vid_length) * 100)
+        percent_edited = round(((old_vid_length - new_video_length) / old_vid_length) * 100)
         print("\n------------------------------------")
         print("Edited out: ", percent_edited, "% of video")
         print("------------------------------------")
