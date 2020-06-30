@@ -1,7 +1,7 @@
 """
     @file: video_slice.py
     @author: Nish Gowda 2020
-    About: selects the frames of the selected objects
+    About: selects the frames of the selected objects or motion
     and splices them together to create a new scene of
     the video.
     This is meant to be built on top of the object_tracker.py
@@ -25,8 +25,6 @@ from sort import *
 from progress.bar import Bar
 
 
-
-
 class VideoSplice():
 # Stitches together the frames of the targeted objects to create a sequence
     def cut_tracker_video(self, videopath, outpath,  object_list, obj_frames):
@@ -44,6 +42,7 @@ class VideoSplice():
         bar = Bar('WRITING SEQUENCE TO VIDEO ', max=len(obj_frames), suffix='%(percent)d%%')
         for obj in object_list:
             if obj in obj_frames:
+                # grab the frame from the dictionary and write it to the out video
                     for frames in obj_frames.get(obj):
                         outvideo.write(frames)
                         bar.next()
@@ -76,14 +75,15 @@ class VideoSplice():
         outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
         edited_frames = []
         for avg_frame, frame in frames.items():
+            # calculates what percentage of the values each frame belongs to
             top_percent = (avg_frame / len(frames)) * 100
-            #print(top_percent)
             if top_percent >= float(motion_percent[0]) or top_percent <= float(top_percent[1]):
                 edited_frames.append(avg_frame)
-                edited_frames = list(set(edited_frames))
-                #print(edited_frames)
+                edited_frames = list(set(edited_frames)) # ensures that there are no duplicate frames in list
+
         bar = Bar('WRITING SEQUENCE TO VIDEO ', max=len(edited_frames), suffix='%(percent)d%%')
         for percent_frame in edited_frames:
+            # grab the frames from the dictionary in motion_detection algorithm and write it to the video
             outvideo.write(frames.get(percent_frame))
             bar.next()
             time.sleep(0.1)

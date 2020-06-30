@@ -65,20 +65,18 @@ class ObjectTracker():
         return detections[0]
     def track_video(self, video_file, outpath):
         videopath = str(video_file)
+        # color palete for boxes
         colors=[(255,0,0),(0,255,0),(0,0,255),(255,0,255),(128,0,0),(0,128,0),(0,0,128),(128,0,128),(128,128,0),(0,128,128)]
         vid = cv2.VideoCapture(videopath)
         vid.set(cv2.CAP_PROP_BUFFERSIZE, 2)
         mot_tracker = Sort()
 
-        #cv2.namedWindow('Stream',cv2.WINDOW_NORMAL)
-        #cv2.resizeWindow('Stream', (800,600))
+
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         ret,frame=vid.read()
         vw = frame.shape[1]
         vh = frame.shape[0]
         video_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
-        print ("Video size", vw,vh)
-        print(filepath)
         outvideo = cv2.VideoWriter(outpath,fourcc,20.0,(vw,vh))
         frames = 0
         starttime = time.time()
@@ -101,18 +99,20 @@ class ObjectTracker():
             unpad_w = img_size - pad_x
             if detections is not None:
                 tracked_objects = mot_tracker.update(detections.cpu())
-
                 unique_labels = detections[:, -1].cpu().unique()
                 n_cls_preds = len(unique_labels)
                 for x1, y1, x2, y2, obj_id, cls_pred in tracked_objects:
                     cls = classes[int(cls_pred)]
                     obj = f"{cls}-{obj_id}" # The identity of the objects found
+                    # .setdefault allow all the frames that an object exists in to be appended to that
+                    # object in the dictionary.
                     self.objects.setdefault(obj, []).append(frame)
                     box_h = int(((y2 - y1) / unpad_h) * img.shape[0])
                     box_w = int(((x2 - x1) / unpad_w) * img.shape[1])
                     y1 = int(((y1 - pad_y // 2) / unpad_h) * img.shape[0])
                     x1 = int(((x1 - pad_x // 2) / unpad_w) * img.shape[1])
                     color = colors[int(obj_id) % len(colors)]
+                    # place the box over the detected image
                     cv2.rectangle(frame, (x1, y1), (x1+box_w, y1+box_h), color, 4)
                     cv2.rectangle(frame, (x1, y1-35), (x1+len(cls)*19+80, y1), color, -1)
                     cv2.putText(frame, cls + "-" + str(int(obj_id)), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
