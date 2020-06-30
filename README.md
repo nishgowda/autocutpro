@@ -18,7 +18,7 @@ git clone https://github.com/nishgowda/Object-Tracking-Video-Editor
   ### Example:
 
   ```
-  $ python3 main.py object videos/short-clip.mp4 test-output2.mp4 car-3.0 person-15.0
+  $ python3 main.py object videos/short-clip.mp4 out/test-output2.mp4 car-3.0 person-15.0
   ```
 ### For Motion Detection:
   1. cd into directory
@@ -26,6 +26,6 @@ git clone https://github.com/nishgowda/Object-Tracking-Video-Editor
   3. Provide the directory of the video you would like to read, specify what the filename and output should be and the motion threshold
   ### Example:
   ```
-  $ python3 main.py motion videos/short-test.mp4 motion-test-new.mp4 10 15
+  $ python3 main.py motion videos/short-clip.mp4 edits/motion-test-variety-new.mp4 10 15
   ```
 *A project by Nish Gowda*
