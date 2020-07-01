@@ -40,18 +40,24 @@ class VideoSplice():
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
         bar = Bar('WRITING SEQUENCE TO VIDEO ', max=len(obj_frames), suffix='%(percent)d%%')
-        for obj in object_list:
-            if obj in obj_frames:
-                # grab the frame from the dictionary and write it to the out video
-                    for frames in obj_frames.get(obj):
-                        outvideo.write(frames)
-                        bar.next()
-            else:
-                print(f"{obj} is not detected")
+        if 'random' in object_list:
+            obj = random.choice(list(obj_frames))
+            for frames in obj_frames.get(obj):
+                outvideo.write(frames)
+                bar.next()
+        else:
+            for obj in object_list:
+                if obj in obj_frames:
+                    # grab the frame from the dictionary and write it to the out video
+                        for frames in obj_frames.get(obj):
+                            outvideo.write(frames)
+                            bar.next()
+                else:
+                    print(f"{obj} is not detected")
 
-            ch = 0xFF & cv2.waitKey(1)
-            if ch == 27:
-                    break
+                ch = 0xFF & cv2.waitKey(1)
+                if ch == 27:
+                        break
         new_video = cv2.VideoCapture(filepath)
         new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
         percent_edited = round(((old_vid_length - new_video_length) / old_vid_length) * 100)
@@ -74,13 +80,22 @@ class VideoSplice():
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
         edited_frames = []
-        for avg_frame, frame in frames.items():
-            # calculates what percentage of the values each frame belongs to
-            top_percent = (avg_frame / len(frames)) * 100
-            if top_percent >= float(motion_percent[0]) or top_percent <= float(top_percent[1]):
-                edited_frames.append(avg_frame)
-                edited_frames = list(set(edited_frames)) # ensures that there are no duplicate frames in list
-
+        print(motion_percent)
+        if 'random' in motion_percent:
+            for avg_frame, frame in frames.items():
+                top_percent = (avg_frame / len(frames)) * 100
+                compared_percent1 = random.randint(1,99)
+                compared_percent2 = random.randint(compared_percent1,100)
+                if top_percent >= float(compared_percent1) or top_percent <= float(compared_percent2):
+                    edited_frames.append(avg_frame)
+                    edited_frames = list(set(edited_frames)) # ensures that there are no duplicate frames in list
+        else:
+            for avg_frame, frame in frames.items():
+                # calculates what percentage of the values each frame belongs to
+                top_percent = (avg_frame / len(frames)) * 100
+                if top_percent >= float(motion_percent[0]) or top_percent <= float(top_percent[1]):
+                    edited_frames.append(avg_frame)
+                    edited_frames = list(set(edited_frames)) # ensures that there are no duplicate frames in list
         bar = Bar('WRITING SEQUENCE TO VIDEO ', max=len(edited_frames), suffix='%(percent)d%%')
         for percent_frame in edited_frames:
             # grab the frames from the dictionary in motion_detection algorithm and write it to the video

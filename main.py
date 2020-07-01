@@ -35,7 +35,7 @@ class Main():
             video_splice = VideoSplice()
             motion_detector.compare_frames(self.video_file)
             frames = motion_detector.frames
-            video_splice.cut_motion_video(self.video_file, self.outpath, self.motion_percent,frames)
+            video_splice.cut_motion_video(self.video_file, self.outpath, self.motion_percent, frames)
         else:
             print('Not an option')
 
@@ -45,12 +45,10 @@ if __name__ == "__main__":
     if main.option == 'motion':
         main.video_file = sys.argv[2]
         main.outpath = sys.argv[3]
-        main.filename = sys.argv[4]
-        main.motion_percent = sys.argv[5:]
+        main.motion_percent = sys.argv[4:]
         main.object_list = []
     elif main.option == 'object':
         main.video_file = sys.argv[2]
         main.outpath = sys.argv[3]
-        main.filename = sys.argv[4]
-        main.object_list = sys.argv[5:]
+        main.object_list = sys.argv[4:]
     main.run()

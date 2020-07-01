@@ -125,6 +125,6 @@ class ObjectTracker():
                 break
         totaltime = time.time()-starttime
         print("\n", frames, "frames", totaltime/frames, "s/frame")
-        print("Saved file as " + str(filepath))
+        print("Saved file as " + str(outpath))
         cv2.destroyAllWindows()
         outvideo.release()
