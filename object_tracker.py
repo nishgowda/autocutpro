@@ -1,7 +1,8 @@
 """
     @file: object_tracker.py
     @author: Nish Gowda 2020
-    @about: The purpose of this file is to detect the objects
+    
+    The purpose of this file is to detect the objects
     in each frame of a given video. The detect image function
     uses the sort and model file to detect images that are
     within the model class in a given frame. With that, it stores the
@@ -39,8 +40,7 @@ model.eval()
 classes = utils.load_classes(class_path)
 Tensor = torch.FloatTensor
 
-
-class ObjectTracker():
+class ObjectTracker:
     def __init__(self):
         self.objects = {}
 
@@ -70,7 +70,6 @@ class ObjectTracker():
         vid = cv2.VideoCapture(videopath)
         vid.set(cv2.CAP_PROP_BUFFERSIZE, 2)
         mot_tracker = Sort()
-
 
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         ret,frame=vid.read()

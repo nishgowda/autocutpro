@@ -5,21 +5,17 @@
     computing the difference between their
     rgb values for every pixel.
 """
-
-
-
 import cv2
 import numpy as np
 from PIL import Image
 import collections
 from progress.bar import Bar
 import time
-class MotionDetection():
 
+class MotionDetection:
     def __init__(self):
         self.total_diff = 0.0
         self.frames = {}
-
     #computes the rgb value for each pixel in each frame
     def compare_frames(self, videopath):
         vid = cv2.VideoCapture(videopath)

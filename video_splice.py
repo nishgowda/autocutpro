@@ -1,15 +1,14 @@
 """
     @file: video_slice.py
     @author: Nish Gowda 2020
-    About: selects the frames of the selected objects or motion
+    
+    This selects the frames of the selected objects or motion
     and splices them together to create a new scene of
-    the video.
-    This is meant to be built on top of the object_tracker.py
-    and motion_detection.py
-    file.
+    the video. This is meant to be built on top of the object_tracker.py
+    and motion_detection.py files.
 """
 from models import *
-from utils import *
+import utils
 from object_tracker import ObjectTracker
 from motion_detection import MotionDetection
 import os, sys, time, datetime, random
@@ -21,11 +20,13 @@ from datetime import datetime
 from collections import defaultdict
 from PIL import Image
 import cv2
-from sort import *
+import sort
 from progress.bar import Bar
 
 
-class VideoSplice():
+class VideoSplice:
+    def __init__(self):
+        self.split = "\n------------------------------------"
 # Stitches together the frames of the targeted objects to create a sequence
     def cut_tracker_video(self, videopath, outpath,  object_list, obj_frames):
         vid = cv2.VideoCapture(videopath)
@@ -61,9 +62,9 @@ class VideoSplice():
         new_video = cv2.VideoCapture(filepath)
         new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
         percent_edited = round(((old_vid_length - new_video_length) / old_vid_length) * 100)
-        print("\n------------------------------------")
+        print(self.split)
         print("Edited out ", percent_edited, "% of video")
-        print("\n------------------------------------")
+        print(self.split)
         print("\nSaved edited video to output file as ", filepath)
         cv2.destroyAllWindows()
         outvideo.release()
@@ -110,7 +111,7 @@ class VideoSplice():
         new_video = cv2.VideoCapture(filepath)
         new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
         percent_edited = round(((old_vid_length - new_video_length) / old_vid_length) * 100)
-        print("\n------------------------------------")
+        print(self.split)
         print("Edited out: ", percent_edited, "% of video")
-        print("------------------------------------")
+        print(self.split)
         print("\nSaved Edited video to: ", filepath)
