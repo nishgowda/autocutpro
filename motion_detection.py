@@ -1,9 +1,11 @@
 """
     @file: motion_detection.py
     @author: Nish Gowda 2020
-    @about: this file compares each frame by
-    computing the difference between their
-    rgb values for every pixel.
+    
+    The purpose of this program is to compare each frame by
+    computing the difference between their rgb values for every pixel.
+    This is later applied to video_splice.py to connect each frame to 
+    a full video.
 """
 import cv2
 import numpy as np
@@ -27,35 +29,35 @@ class MotionDetection:
             if not ret:
                 break
             pilimg = Image.fromarray(frame)
-            prevFrame = cv2.cvtColor(frame, cv2.COLOR_HSV2RGB)
-            pilimg2 = Image.fromarray(prevFrame)
+            prev_frame = cv2.cvtColor(frame, cv2.COLOR_HSV2RGB)
+            pilimg2 = Image.fromarray(prev_frame)
             img = np.array(pilimg)
-            prevImg = np.array(pilimg2)
+            prev_img = np.array(pilimg2)
 
-            imgWidth = img.shape[0]
-            imgHeight = img.shape[1]
-            numPixels = img.size
+            img_width = img.shape[0]
+            img_height = img.shape[1]
+            num_pixels = img.size
             # Compare the rgb value of each pixel between the current and previous frames
-            diffR, diffG, diffB = 0.0, 0.0, 0.0
+            diff_r, diff_g, diff_b = 0.0, 0.0, 0.0
             if old_frame is not None:
                 # .split grabs the rgb (in order of grb) of the img
-                colorsB1, colorsG1, colorsR1 = cv2.split(img)
-                colorsB2, colorsG2, colorsR2 = cv2.split(prevImg)
+                colors_b1, colors_g1, colors_r1 = cv2.split(img)
+                colors_b2, colors_g2, colors_r2 = cv2.split(prev_img)
                 # Grab the sums of each channels difference -- matrix or np array and divide by 255
-                diffR += np.sum(colorsR1 - colorsR2) / 255.0
-                diffG += np.sum(colorsG1 - colorsG2) / 255.0
-                diffB += np.sum(colorsB1 - colorsB2) / 255.0
+                diff_r += np.sum(colors_r1 - colors_r2) / 255.0
+                diff_g += np.sum(colors_g1 - colors_g2) / 255.0
+                diff_b += np.sum(colors_b1 - colors_b2) / 255.0
                 # divide each difference by num pixels to get the avg difference per chanel
-                diffR /= numPixels
-                diffG /= numPixels
-                diffB /= numPixels
+                diff_r /= num_pixels
+                diff_g /= num_pixels
+                diff_b /= num_pixels
                 # get the avg of all three channels
-                self.total_diff = (diffR + diffG + diffB) / 3.0
+                self.total_diff = (diff_r + diff_g + diff_b) / 3.0
                 self.total_diff = round(self.total_diff * 100)
                 # update our dictionary to grab the difference of the current and previous frame as well as the current frame
                 self.frames.update({self.total_diff : frame})
             bar.next()
-            old_frame = prevFrame
+            old_frame = prev_frame
             ch = 0xFF & cv2.waitKey(1)
             if ch == 27:
                 break

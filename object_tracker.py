@@ -106,17 +106,7 @@ class ObjectTracker:
                     # .setdefault allow all the frames that an object exists in to be appended to that
                     # object in the dictionary.
                     self.objects.setdefault(obj, []).append(frame)
-                    box_h = int(((y2 - y1) / unpad_h) * img.shape[0])
-                    box_w = int(((x2 - x1) / unpad_w) * img.shape[1])
-                    y1 = int(((y1 - pad_y // 2) / unpad_h) * img.shape[0])
-                    x1 = int(((x1 - pad_x // 2) / unpad_w) * img.shape[1])
-                    color = colors[int(obj_id) % len(colors)]
-                    # place the box over the detected image
-                    cv2.rectangle(frame, (x1, y1), (x1+box_w, y1+box_h), color, 4)
-                    cv2.rectangle(frame, (x1, y1-35), (x1+len(cls)*19+80, y1), color, -1)
-                    cv2.putText(frame, cls + "-" + str(int(obj_id)), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
-
-
+                    
             outvideo.write(frame)
             bar.next()
             ch = 0xFF & cv2.waitKey(1)
