@@ -1,6 +1,6 @@
 """
     @file: motion_detection.py
-    @author: Nish Gowda 2020
+    @author: Nish Gowda
     
     The purpose of this program is to compare each frame by
     computing the difference between their rgb values for every pixel.
@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 from PIL import Image
 import collections
-from progress.bar import Bar
+from tqdm import tqdm
 import time
 
 class MotionDetection:
@@ -23,8 +23,7 @@ class MotionDetection:
         vid = cv2.VideoCapture(videopath)
         video_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
         old_frame = None
-        bar = Bar('Comparing frames in video', max=video_length, suffix='%(percent)d%%')
-        while (True):
+        for i in tqdm(range(video_length)):
             ret, frame = vid.read()
             if not ret:
                 break
@@ -56,7 +55,6 @@ class MotionDetection:
                 self.total_diff = round(self.total_diff * 100)
                 # update our dictionary to grab the difference of the current and previous frame as well as the current frame
                 self.frames.update({self.total_diff : frame})
-            bar.next()
             old_frame = prev_frame
             ch = 0xFF & cv2.waitKey(1)
             if ch == 27:

@@ -1,6 +1,6 @@
 """
     @file: video_slice.py
-    @author: Nish Gowda 2020
+    @author: Nish Gowda
     
     This selects the frames of the selected objects or motion
     and splices them together to create a new scene of
@@ -21,8 +21,6 @@ from collections import defaultdict
 from PIL import Image
 import cv2
 import sort
-from progress.bar import Bar
-
 
 class VideoSplice:
     def __init__(self):
@@ -32,42 +30,39 @@ class VideoSplice:
         vid = cv2.VideoCapture(videopath)
         old_vid_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
         vid.set(cv2.CAP_PROP_BUFFERSIZE, 2)
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        # fourcc = cv2.VideoWriter_fourcc(*'XVID')
         ret,frame=vid.read()
         vw = frame.shape[1]
         vh = frame.shape[0]
         filepath = outpath
-        print(filepath)
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
-        bar = Bar('WRITING SEQUENCE TO VIDEO ', max=len(obj_frames), suffix='%(percent)d%%')
+        outvideo = cv2.VideoWriter(filepath, fourcc, 20.0, (vw, vh))
+
         if 'random' in object_list:
             obj = random.choice(list(obj_frames))
             for frames in obj_frames.get(obj):
                 outvideo.write(frames)
-                bar.next()
         else:
             for obj in object_list:
                 if obj in obj_frames:
                     # grab the frame from the dictionary and write it to the out video
                         for frames in obj_frames.get(obj):
                             outvideo.write(frames)
-                            bar.next()
                 else:
                     print(f"{obj} is not detected")
-
                 ch = 0xFF & cv2.waitKey(1)
                 if ch == 27:
                         break
-        new_video = cv2.VideoCapture(filepath)
-        new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
-        percent_edited = round(((old_vid_length - new_video_length) / old_vid_length) * 100)
-        print(self.split)
-        print("Edited out ", percent_edited, "% of video")
-        print(self.split)
-        print("\nSaved edited video to output file as ", filepath)
         cv2.destroyAllWindows()
         outvideo.release()
+        new_video = cv2.VideoCapture(filepath)
+        new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
+        percent_edited = (((old_vid_length - new_video_length) / old_vid_length) * 100)
+        print(self.split)
+        print("Edited out {:.0f}% of source video".format(percent_edited))
+        print(self.split)
+        print("Saved edited video to output file as ", filepath)
+
 
 # Stitches together the the frames that have a motion threshold of greater than or equal to the input to create a sequence.
     def cut_motion_video(self, videopath, outpath,  motion_percent, frames):
@@ -97,12 +92,9 @@ class VideoSplice:
                 if top_percent >= float(motion_percent[0]) or top_percent <= float(top_percent[1]):
                     edited_frames.append(avg_frame)
                     edited_frames = list(set(edited_frames)) # ensures that there are no duplicate frames in list
-        bar = Bar('WRITING SEQUENCE TO VIDEO ', max=len(edited_frames), suffix='%(percent)d%%')
         for percent_frame in edited_frames:
             # grab the frames from the dictionary in motion_detection algorithm and write it to the video
             outvideo.write(frames.get(percent_frame))
-            bar.next()
-            time.sleep(0.1)
             ch = 0xFF & cv2.waitKey(1)
             if ch == 27:
                     break
@@ -110,8 +102,8 @@ class VideoSplice:
         outvideo.release()
         new_video = cv2.VideoCapture(filepath)
         new_video_length = int(new_video.get(cv2.CAP_PROP_FRAME_COUNT))
-        percent_edited = round(((old_vid_length - new_video_length) / old_vid_length) * 100)
+        percent_edited = (((old_vid_length - new_video_length) / old_vid_length) * 100)
         print(self.split)
-        print("Edited out: ", percent_edited, "% of video")
+        print("Edited out: {:.0f}% of source video".format(percent_edited))
         print(self.split)
-        print("\nSaved Edited video to: ", filepath)
+        print("Saved edited video to: ", filepath)

@@ -1,6 +1,6 @@
 """
     @file: main.py
-    @author: Nish Gowda 2020
+    @author: Nish Gowda
     
     The purpose of this file is to purely be the
     main pipeline between the video_splice and object_tracker files/motion_detection.

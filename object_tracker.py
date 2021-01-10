@@ -1,6 +1,6 @@
 """
     @file: object_tracker.py
-    @author: Nish Gowda 2020
+    @author: Nish Gowda
     
     The purpose of this file is to detect the objects
     in each frame of a given video. The detect image function
@@ -23,7 +23,7 @@ from collections import defaultdict
 from PIL import Image
 import cv2
 from sort import *
-from progress.bar import Bar
+from tqdm import tqdm
 # load weights and set defaults
 config_path='config/yolov3.cfg'
 weights_path='config/yolov3.weights'
@@ -63,6 +63,7 @@ class ObjectTracker:
             detections = model(input_img)
             detections = utils.non_max_suppression(detections, 80, conf_thres, nms_thres)
         return detections[0]
+
     def track_video(self, video_file, outpath):
         videopath = str(video_file)
         # color palete for boxes
@@ -79,10 +80,8 @@ class ObjectTracker:
         outvideo = cv2.VideoWriter(outpath,fourcc,20.0,(vw,vh))
         frames = 0
         starttime = time.time()
-        bar = Bar('Tracking objects in video ', max=video_length, suffix='%(percent)d%%')
-        while(True):
+        for i in tqdm(range(video_length)):
             ret, frame = vid.read()
-
             if not ret:
                 break
             frames += 1
@@ -106,9 +105,8 @@ class ObjectTracker:
                     # .setdefault allow all the frames that an object exists in to be appended to that
                     # object in the dictionary.
                     self.objects.setdefault(obj, []).append(frame)
-                    
+
             outvideo.write(frame)
-            bar.next()
             ch = 0xFF & cv2.waitKey(1)
             if ch == 27:
                 break
