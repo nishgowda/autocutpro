@@ -24,6 +24,7 @@ from PIL import Image
 import cv2
 from sort import *
 from tqdm import tqdm
+
 # load weights and set defaults
 config_path='config/yolov3.cfg'
 weights_path='config/yolov3.weights'
@@ -42,7 +43,8 @@ Tensor = torch.FloatTensor
 
 class ObjectTracker:
     def __init__(self):
-        self.objects = {}
+        self.objects = []
+        self.obj_frames = {}
 
     def detect_image(self, img):
         # scale and pad image
@@ -102,16 +104,18 @@ class ObjectTracker:
                 for x1, y1, x2, y2, obj_id, cls_pred in tracked_objects:
                     cls = classes[int(cls_pred)]
                     obj = f"{cls}-{obj_id}" # The identity of the objects found
-                    # .setdefault allow all the frames that an object exists in to be appended to that
+                    self.objects.append(obj)
+                    # setdefault allow all the frames that an object exists in to be appended to that
                     # object in the dictionary.
-                    self.objects.setdefault(obj, []).append(frame)
-
+                    self.obj_frames.setdefault(obj, []).append(frame)
+                    # Note we don't add the boexes to the frames here like you would normally do.
+                    # Only want the frames so we can later splice them together to make a video
             outvideo.write(frame)
             ch = 0xFF & cv2.waitKey(1)
             if ch == 27:
                 break
         totaltime = time.time()-starttime
-        print("\n", frames, "frames", totaltime/frames, "s/frame")
+        print(frames, " frames {:.2f}s/frame".format(totaltime/frames))
         print("Saved file as " + str(outpath))
         cv2.destroyAllWindows()
         outvideo.release()

@@ -25,7 +25,7 @@ import sort
 class VideoSplice:
     def __init__(self):
         self.split = "\n------------------------------------"
-# Stitches together the frames of the targeted objects to create a sequence
+    # Stitches together the frames of the targeted objects to create a sequence
     def cut_tracker_video(self, videopath, outpath,  object_list, obj_frames):
         vid = cv2.VideoCapture(videopath)
         old_vid_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -37,7 +37,7 @@ class VideoSplice:
         filepath = outpath
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         outvideo = cv2.VideoWriter(filepath, fourcc, 20.0, (vw, vh))
-
+    
         if 'random' in object_list:
             obj = random.choice(list(obj_frames))
             for frames in obj_frames.get(obj):
@@ -64,7 +64,7 @@ class VideoSplice:
         print("Saved edited video to output file as ", filepath)
 
 
-# Stitches together the the frames that have a motion threshold of greater than or equal to the input to create a sequence.
+    # Stitches together the the frames that have a motion threshold of greater than or equal to the input to create a sequence.
     def cut_motion_video(self, videopath, outpath,  motion_percent, frames):
         vid = cv2.VideoCapture(videopath)
         vid.set(cv2.CAP_PROP_BUFFERSIZE, 2)
