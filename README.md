@@ -22,7 +22,7 @@ pip install requirements.txt
   ### Example:
 
   ```
-  $ python3 main.py object videos/short-clip.mp4 out/test-output2.mp4 car-3.0 person-15.0
+  $ python3 main.py object videos/short-clip.mp4 out/test-output2.mp4
   ```
 ### For Motion Detection:
   1. Specify motion algorithm
