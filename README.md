@@ -17,7 +17,8 @@ pip install requirements.txt
 ### For Object Tracking
   1. Run the shell file download_weights.sh or run ```wget https://pjreddie.com/media/files/yolov3.weights``` (only need to do this once)
   2. Specify object tracking method
-  3. Specify a directory of the video you would like to read, specify the output directory for the edited copy and the objects you would like to detect. (You can also choose random to select a random object in the video for fun)
+  3. Specify a directory of the video you would like to read and specify the output directory for the edited copy. (You can also choose random to select a random object in the video for fun)
+  4. Once it detects objects, choose the objects from the displayed list to edit the video around
   ### Example:
 
   ```
