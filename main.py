@@ -43,12 +43,12 @@ def run_obj_tracker(video_file, outpath):
 
 if __name__ == "__main__":
     option = sys.argv[1]
-    if option == 'motion':
+    if option == "motion":
         video_file = sys.argv[2]
         outpath = sys.argv[3]
         motion_percent = sys.argv[4:]
         run_motion_detection(video_file, outpath, motion_percent)
-    elif option == 'object':
+    elif option == "object":
         video_file = sys.argv[2]
         outpath = sys.argv[3]
         run_obj_tracker(video_file, outpath)

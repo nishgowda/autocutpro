@@ -26,9 +26,9 @@ from sort import *
 from tqdm import tqdm
 
 # load weights and set defaults
-config_path='config/yolov3.cfg'
-weights_path='config/yolov3.weights'
-class_path='config/coco.names'
+config_path="config/yolov3.cfg"
+weights_path="config/yolov3.weights"
+class_path="config/coco.names"
 img_size=416
 conf_thres=0.8
 nms_thres=0.4
@@ -43,8 +43,8 @@ Tensor = torch.FloatTensor
 
 class ObjectTracker:
     def __init__(self):
-        self.objects = []
-        self.obj_frames = {}
+        self.objects = [] # stores a list of objects found in video
+        self.obj_frames = {} # stores the frames with the object names
 
     def detect_image(self, img):
         # scale and pad image
@@ -104,7 +104,7 @@ class ObjectTracker:
                 for x1, y1, x2, y2, obj_id, cls_pred in tracked_objects:
                     cls = classes[int(cls_pred)]
                     obj = f"{cls}-{obj_id}" # The identity of the objects found
-                    self.objects.append(obj)
+                    self.objects.append(obj) # append to list of objects; later used in displaying to user
                     # setdefault allow all the frames that an object exists in to be appended to that
                     # object in the dictionary.
                     self.obj_frames.setdefault(obj, []).append(frame)
@@ -119,3 +119,4 @@ class ObjectTracker:
         print("Saved file as " + str(outpath))
         cv2.destroyAllWindows()
         outvideo.release()
+

@@ -25,7 +25,7 @@ import sort
 class VideoSplice:
     def __init__(self):
         self.split = "\n------------------------------------"
-    # Stitches together the frames of the targeted objects to create a sequence
+    # stitches together the frames of the targeted objects to create a sequence
     def cut_tracker_video(self, videopath, outpath,  object_list, obj_frames):
         vid = cv2.VideoCapture(videopath)
         old_vid_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -38,7 +38,7 @@ class VideoSplice:
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         outvideo = cv2.VideoWriter(filepath, fourcc, 20.0, (vw, vh))
     
-        if 'random' in object_list:
+        if "random" in object_list:
             obj = random.choice(list(obj_frames))
             for frames in obj_frames.get(obj):
                 outvideo.write(frames)
@@ -77,7 +77,7 @@ class VideoSplice:
         outvideo = cv2.VideoWriter(filepath,fourcc,20.0,(vw,vh))
         edited_frames = []
         print(motion_percent)
-        if 'random' in motion_percent:
+        if "random" in motion_percent:
             for avg_frame, frame in frames.items():
                 top_percent = (avg_frame / len(frames)) * 100
                 compared_percent1 = random.randint(1,99)
@@ -107,3 +107,4 @@ class VideoSplice:
         print("Edited out: {:.0f}% of source video".format(percent_edited))
         print(self.split)
         print("Saved edited video to: ", filepath)
+

@@ -18,7 +18,7 @@ class MotionDetection:
     def __init__(self):
         self.total_diff = 0.0
         self.frames = {}
-    #computes the rgb value for each pixel in each frame
+    # computes the rgb value for each pixel in each frame
     def compare_frames(self, videopath):
         vid = cv2.VideoCapture(videopath)
         video_length = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -36,13 +36,13 @@ class MotionDetection:
             img_width = img.shape[0]
             img_height = img.shape[1]
             num_pixels = img.size
-            # Compare the rgb value of each pixel between the current and previous frames
+            # compare the rgb value of each pixel between the current and previous frames
             diff_r, diff_g, diff_b = 0.0, 0.0, 0.0
             if old_frame is not None:
                 # .split grabs the rgb (in order of grb) of the img
                 colors_b1, colors_g1, colors_r1 = cv2.split(img)
                 colors_b2, colors_g2, colors_r2 = cv2.split(prev_img)
-                # Grab the sums of each channels difference -- matrix or np array and divide by 255
+                # grab the sums of each channels difference -- matrix or np array and divide by 255
                 diff_r += np.sum(colors_r1 - colors_r2) / 255.0
                 diff_g += np.sum(colors_g1 - colors_g2) / 255.0
                 diff_b += np.sum(colors_b1 - colors_b2) / 255.0
@@ -60,3 +60,4 @@ class MotionDetection:
             if ch == 27:
                 break
         cv2.destroyAllWindows()
+        
