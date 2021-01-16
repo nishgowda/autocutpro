@@ -1,4 +1,4 @@
-# Smart Clips
+# Smart Video Editor
 Automating video editing through Object Tracking and Motion Detection
 ## HOW?
 The first method of video editing is through the use of **Object Tracking**. Using PyTorch, YOLOv3, and OpenCV a [deep learning model](https://github.com/abewley/sort) is made to track objects in a given video. Using this model, the user specifies which objects in a given video they would like to scan through and will then make cuts along the frames of these objects in the video and splice them together to create a new scene. If the object is one of the available classes that the model can detect, then this allows the user to save themselves of having to go through all the amount of footage just to edit a given scene with a specific object.
